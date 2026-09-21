@@ -3,7 +3,6 @@ import pandas as pd
 import json
 from openai import OpenAI
 import chromadb
-from streamlit_dnd import st_dnd
 import uuid
 from datetime import datetime
 
@@ -338,9 +337,7 @@ if page == "并购标的录入":
                     try:
                         match_result = json.loads(match_json_str)
                         items = match_result["match_result"]
-                        items_dnd = [{"id":str(i["rank"]), "content":f"排名：{i['rank']}｜得分：{i['total_score']}｜编号：{i['project_no']} \n{i['introduction_copy']}"} for i in items]
-                        reordered = st_dnd(items_dnd, key="match_dnd")
-                        st.write("↑ 可拖拽调整排序")
+                        st.write("匹配结果按总分从高到低排序：")
                         for item in items:
                             st.markdown(f"**排名：{item['rank']}｜得分：{item['total_score']}｜项目编号：{item['project_no']}｜状态：{item.get('project_status','')}**")
                             st.text_area("推介文案", item["introduction_copy"], height=150, key=f"copy_{item['rank']}")
