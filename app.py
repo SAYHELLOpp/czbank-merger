@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import json
-import pyperclip
 from openai import OpenAI
 import chromadb
 from streamlit_dnd import st_dnd
@@ -474,17 +473,18 @@ elif page == "管理员工作台":
                 save_df(df)
                 st.success("更新时间已刷新")
         with col_b:
-            if st.button("一键入库（复制台账行）"):
+            if st.button("一键入库（生成台账行）"):
                 ledger_type = "标的" if row_data["proj_type"]=="标的" else "需求"
                 line = build_tencent_doc_row(row_data, ledger_type)
-                pyperclip.copy(line)
-                st.success("✅ 台账文本已复制剪贴板，直接粘贴进腾讯文档表格")
+                st.success("✅ 已生成可粘贴至腾讯文档的台账行，全选下方文本复制后直接粘贴进表格即可：")
+                st.code(line, language="text")
+                st.download_button("下载台账行文件", line, file_name=f"台账行_{selected_pid}.txt")
         with col_c:
-            if st.button("复制台账行"):
+            if st.button("生成台账行"):
                 ledger_type = "标的" if row_data["proj_type"]=="标的" else "需求"
                 line = build_tencent_doc_row(row_data, ledger_type)
-                pyperclip.copy(line)
-                st.success("复制成功")
+                st.code(line, language="text")
+                st.download_button("下载台账文件", line, file_name=f"台账行_{selected_pid}.txt")
         with col_d:
             new_status = st.selectbox("修改状态", ["项目有效","有效性待确认","项目搁置","已成交"])
             if st.button("确认修改状态"):
