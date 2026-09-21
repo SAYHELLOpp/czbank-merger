@@ -7,13 +7,13 @@ import uuid
 from datetime import datetime
 
 # ===================== 配置区 =====================
-# 大模型API配置，请替换为你的key和endpoint
+# 从Streamlit后台Secrets读取配置，无需修改代码
 client_llm = OpenAI(
-    api_key="YOUR_API_KEY",
-    base_url="YOUR_API_ENDPOINT"
+    api_key=st.secrets["OPENAI_API_KEY"],
+    base_url=st.secrets["OPENAI_BASE_URL"]
 )
-MODEL_NAME = "gpt-4o-mini"
-EMBED_MODEL = "text-embedding-3-small"
+MODEL_NAME = st.secrets.get("MODEL_NAME", "gpt-4o-mini")
+EMBED_MODEL = st.secrets.get("EMBED_MODEL", "text-embedding-3-small")
 
 # 向量库初始化
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
